@@ -60,9 +60,87 @@ def transform(spark: SparkSession, data: DataFrame) -> DataFrame:
 #### `Section 2` See the pipeline of CI/CD
 ##### Observe the CI/CD pipeline in action, which includes steps for installation, formatting, linting, and testing.
 1. __`make format`__
-<img src="https://github.com/nogibjj/IDS706-Mini-Project-10-sp699/assets/143478016/aca85b86-5f39-4896-bcac-5f93f85188a2.png" width="400" height="100"/>
+
+<img src="https://github.com/nogibjj/IDS706-Mini-Project-10-sp699/assets/143478016/aca85b86-5f39-4896-bcac-5f93f85188a2.png" width="400" height="100"/></br>
 
 2. __`make lint`__
-<img src="https://github.com/nogibjj/IDS706-Mini-Project-10-sp699/assets/143478016/86517b6a-14f5-45ff-b353-6963b1526330.png" width="400" height="130"/>
+
+<img src="https://github.com/nogibjj/IDS706-Mini-Project-10-sp699/assets/143478016/71a25a47-05bc-4437-9cca-d5a21c6655d5.png" width="480" height="90"/></br>
 
 3. __`make test`__
+
+<img src="https://github.com/nogibjj/IDS706-Mini-Project-10-sp699/assets/143478016/e2fe7710-ec18-4f2b-bd41-77e053c82f70.png" width="700" height="300"/></br>
+
+#### `Section 3` PySpark Script
+##### Capture the output of the PySpark command and save it to a report.
+1. __Read the CSV file__
+```
+Original Data:
++-------+---------+--------------+-------------+-----------------+-----------+------+
+|species|   island|bill_length_mm|bill_depth_mm|flipper_length_mm|body_mass_g|   sex|
++-------+---------+--------------+-------------+-----------------+-----------+------+
+| Adelie|Torgersen|          39.1|         18.7|              181|       3750|  MALE|
+| Adelie|Torgersen|          39.5|         17.4|              186|       3800|FEMALE|
+| Adelie|Torgersen|          40.3|         18.0|              195|       3250|FEMALE|
+| Adelie|Torgersen|          NULL|         NULL|             NULL|       NULL|  NULL|
+| Adelie|Torgersen|          36.7|         19.3|              193|       3450|FEMALE|
+| Adelie|Torgersen|          39.3|         20.6|              190|       3650|  MALE|
+| Adelie|Torgersen|          38.9|         17.8|              181|       3625|FEMALE|
+| Adelie|Torgersen|          39.2|         19.6|              195|       4675|  MALE|
+| Adelie|Torgersen|          34.1|         18.1|              193|       3475|  NULL|
+| Adelie|Torgersen|          42.0|         20.2|              190|       4250|  NULL|
+| Adelie|Torgersen|          37.8|         17.1|              186|       3300|  NULL|
+| Adelie|Torgersen|          37.8|         17.3|              180|       3700|  NULL|
+| Adelie|Torgersen|          41.1|         17.6|              182|       3200|FEMALE|
+| Adelie|Torgersen|          38.6|         21.2|              191|       3800|  MALE|
+| Adelie|Torgersen|          34.6|         21.1|              198|       4400|  MALE|
+| Adelie|Torgersen|          36.6|         17.8|              185|       3700|FEMALE|
+| Adelie|Torgersen|          38.7|         19.0|              195|       3450|FEMALE|
+| Adelie|Torgersen|          42.5|         20.7|              197|       4500|  MALE|
+| Adelie|Torgersen|          34.4|         18.4|              184|       3325|FEMALE|
+| Adelie|Torgersen|          46.0|         21.5|              194|       4200|  MALE|
++-------+---------+--------------+-------------+-----------------+-----------+------+
+only showing top 20 rows
+```
+
+2. __Spark SQL Query__
+```
+Data After Spark SQL Query:
++---------+---------------+---------------+
+|  species|max_bill_length|min_bill_length|
++---------+---------------+---------------+
+|   Gentoo|           59.6|           40.9|
+|   Adelie|           46.0|           32.1|
+|Chinstrap|           58.0|           40.9|
++---------+---------------+---------------+
+```
+
+3. __Transform__
+```
+Data After Adding Bill Length Category:
++-------+---------+--------------+-------------+-----------------+-----------+------+--------------------+
+|species|   island|bill_length_mm|bill_depth_mm|flipper_length_mm|body_mass_g|   sex|bill_length_category|
++-------+---------+--------------+-------------+-----------------+-----------+------+--------------------+
+| Adelie|Torgersen|          39.1|         18.7|              181|       3750|  MALE|               Short|
+| Adelie|Torgersen|          39.5|         17.4|              186|       3800|FEMALE|               Short|
+| Adelie|Torgersen|          40.3|         18.0|              195|       3250|FEMALE|              Medium|
+| Adelie|Torgersen|          NULL|         NULL|             NULL|       NULL|  NULL|                Long|
+| Adelie|Torgersen|          36.7|         19.3|              193|       3450|FEMALE|               Short|
+| Adelie|Torgersen|          39.3|         20.6|              190|       3650|  MALE|               Short|
+| Adelie|Torgersen|          38.9|         17.8|              181|       3625|FEMALE|               Short|
+| Adelie|Torgersen|          39.2|         19.6|              195|       4675|  MALE|               Short|
+| Adelie|Torgersen|          34.1|         18.1|              193|       3475|  NULL|               Short|
+| Adelie|Torgersen|          42.0|         20.2|              190|       4250|  NULL|              Medium|
+| Adelie|Torgersen|          37.8|         17.1|              186|       3300|  NULL|               Short|
+| Adelie|Torgersen|          37.8|         17.3|              180|       3700|  NULL|               Short|
+| Adelie|Torgersen|          41.1|         17.6|              182|       3200|FEMALE|              Medium|
+| Adelie|Torgersen|          38.6|         21.2|              191|       3800|  MALE|               Short|
+| Adelie|Torgersen|          34.6|         21.1|              198|       4400|  MALE|               Short|
+| Adelie|Torgersen|          36.6|         17.8|              185|       3700|FEMALE|               Short|
+| Adelie|Torgersen|          38.7|         19.0|              195|       3450|FEMALE|               Short|
+| Adelie|Torgersen|          42.5|         20.7|              197|       4500|  MALE|              Medium|
+| Adelie|Torgersen|          34.4|         18.4|              184|       3325|FEMALE|               Short|
+| Adelie|Torgersen|          46.0|         21.5|              194|       4200|  MALE|              Medium|
++-------+---------+--------------+-------------+-----------------+-----------+------+--------------------+
+only showing top 20 rows
+```
